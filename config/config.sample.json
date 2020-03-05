@@ -1,0 +1,10 @@
+{
+  "ftp_user": "camera",
+  "ftp_pw": "secret",
+  "ftp_port": 2121,
+  "ftp_root": "/path/to/root",
+  "mail_user": "user@domain.com",
+  "mail_pw": "secret",
+  "mail_server": "mail.domain.com",
+  "mail_recipient": "recipient@domain.com"
+}
