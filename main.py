@@ -1,5 +1,5 @@
+import os
 import os.path
-import os.remove
 import ssl
 import smtplib
 import datetime
@@ -73,20 +73,20 @@ class MyHandler(FTPHandler):
 class MyFtpServer:
     def __init__(self, cfg) -> None:
         self.cfg = cfg
-        self.tmpdir = TemporaryDirectory()
+        self.tmpdir = tempfile.TemporaryDirectory()
         print('tempdir location: {0}'.format(self.tmpdir))
         self.ftp_server = None
 
     def start(self) -> None:
         authorizer = DummyAuthorizer()
         # authorizer.add_user(FTP_USER, FTP_PW, DEFAULT_ROOT, perm='elradfmwMT')
-        authorizer.add_user(self.cfg.ftp_user, self.cfg.ftp_pw, self.tmpdir, perm='lrw')
+        authorizer.add_user(self.cfg.ftp_user, self.cfg.ftp_pw, self.tmpdir.name, perm='lrw')
         handler = MyHandler
         handler.cfg = self.cfg
         handler.authorizer = authorizer
         handler.banner = "Camera image uploader"
         # Instantiate FTP server class and listen on 0.0.0.0:2121
-        address = ('', cfg.ftp_port)
+        address = ('', self.cfg.ftp_port)
         self.ftp_server = FTPServer(address, handler)
         # set a limit for connections - keep this small for a smaller attack surface
         self.ftp_server.max_cons = 5
@@ -111,26 +111,6 @@ def parse_config_file():
         file_string = f.read()
     cfg = Config(file_string)
     return cfg
-
-
-def setup_ftp_server(cfg):
-    """
-    Configure the ftp server
-    """
-    authorizer = DummyAuthorizer()
-    # authorizer.add_user(FTP_USER, FTP_PW, DEFAULT_ROOT, perm='elradfmwMT')
-    authorizer.add_user(cfg.ftp_user, cfg.ftp_pw, cfg.ftp_root, perm='lrw')
-    handler = MyHandler
-    handler.cfg = cfg
-    handler.authorizer = authorizer
-    handler.banner = "Camera image uploader"
-    # Instantiate FTP server class and listen on 0.0.0.0:2121
-    address = ('', cfg.ftp_port)
-    server = FTPServer(address, handler)
-    # set a limit for connections - keep this small for a smaller attack surface
-    server.max_cons = 5
-    server.max_cons_per_ip = 5
-    return server
 
 
 def run_main():
