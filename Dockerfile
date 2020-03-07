@@ -17,8 +17,7 @@ RUN cd /tmp && pip3 install -r requirements.txt
 WORKDIR /code
 ADD . /code
 
-EXPOSE 2121 2121
+EXPOSE 2121
 
-WORKDIR "app"
-CMD ["python3", "./main.py"]
+CMD ["python3", "./main.py", "/srv/config/config.json"]
 
