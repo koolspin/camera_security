@@ -35,6 +35,7 @@ class MyHandler(FTPHandler):
     def on_file_received(self, file):
         print('==> File received: {0}'.format(file))
         if os.path.isfile(self.cfg.security_on_file):
+            print('Security mode detected - emailing and saving file')
             self.send_email(file)
             shutil.copy(file, self.cfg.pics_path)
         super().on_file_received(file)

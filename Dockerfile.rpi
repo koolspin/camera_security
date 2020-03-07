@@ -19,5 +19,6 @@ ADD . /code
 
 EXPOSE 2121
 
-CMD ["python3", "./main.py", "/srv/config/config.json"]
+ENTRYPOINT ["python3", "./main.py"]
+CMD ["/srv/config/config.json"]
 
